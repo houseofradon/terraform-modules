@@ -2,7 +2,6 @@ variable "s3_key" {}
 variable "function_name" {}
 variable "role" {}
 variable "handler" {}
-variable "version_hash" {}
 
 variable "runtime" {
   default = "java8"
