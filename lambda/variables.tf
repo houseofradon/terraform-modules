@@ -3,6 +3,10 @@ variable "function_name" {}
 variable "role" {}
 variable "handler" {}
 
+variable "source_code_hash" {
+  default = false
+}
+
 variable "runtime" {
   default = "java8"
 }
