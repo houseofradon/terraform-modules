@@ -1,3 +1,7 @@
+variable "s3_bucket" {
+  default = "radon-bundles"
+}
+
 variable "s3_key" {}
 variable "function_name" {}
 variable "role" {}
