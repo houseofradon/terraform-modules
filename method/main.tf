@@ -116,7 +116,7 @@ resource "aws_api_gateway_integration" "integration" {
   type                    = "AWS"
   uri                     = "${var.integration_invoke_id}"
   passthrough_behavior    = "${var.passthrough_behavior}"
-  
+  credentials             = "${var.credentials}"
 
   request_parameters = "${var.int_request_params}"
   request_templates  = "${local.request_template[var.request_template == "0" ? "default" : "custom"]}"

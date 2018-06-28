@@ -20,6 +20,10 @@ resource "aws_lambda_function" "function" {
   memory_size       = "${var.memory}"
 
   tags = "${var.tags}"
+
+  lifecycle {
+    ignore_changes = ["last_modified"]
+  }
 }
 
 resource "aws_lambda_permission" "permission" {

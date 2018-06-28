@@ -47,7 +47,7 @@ variable "passthrough_behavior" {
 }
 
 variable "credentials" {
-  default = false
+  default = ""
 }
 
 variable "integration_http_method" {
