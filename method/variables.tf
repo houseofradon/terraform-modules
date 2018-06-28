@@ -54,14 +54,14 @@ variable "integration_http_method" {
   default = "POST"
 }
 
-variable "404_selection_pattern" {
+variable "selection_pattern_404" {
   default = ".*not-found.*"
 }
 
-variable "422_selection_pattern" {
+variable "selection_pattern_422" {
   default = ".*:unprocessable-entity.*"
 }
 
-variable "500_selection_pattern" {
+variable "selection_pattern_500" {
   default = ".*internal-server-error.*"
 }
