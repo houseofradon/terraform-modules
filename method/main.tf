@@ -116,7 +116,7 @@ resource "aws_api_gateway_integration" "integration" {
   type                    = "AWS"
   uri                     = "${var.integration_invoke_id}"
   passthrough_behavior    = "${var.passthrough_behavior}"
-  credentials             = "${var.credentials}"
+  
 
   request_parameters = "${var.int_request_params}"
   request_templates  = "${local.request_template[var.request_template == "0" ? "default" : "custom"]}"
@@ -144,7 +144,7 @@ resource "aws_api_gateway_integration_response" "integration_response_404" {
   resource_id        = "${var.resource_id}"
   http_method        = "${var.http_method}"
   status_code        = "${aws_api_gateway_method_response.response_404.status_code}"
-  selection_pattern  = ".*not-found.*"
+  selection_pattern  = "${var.selection_pattern_404}"
   response_templates = "${local.error_templates}"
 }
 
@@ -154,7 +154,7 @@ resource "aws_api_gateway_integration_response" "integration_response_422" {
   resource_id        = "${var.resource_id}"
   http_method        = "${var.http_method}"
   status_code        = "${aws_api_gateway_method_response.response_422.status_code}"
-  selection_pattern  = ".*:unprocessable-entity.*"
+  selection_pattern  = "${var.selection_pattern_422}"
   response_templates = "${local.error_templates}"
 }
 
@@ -164,6 +164,6 @@ resource "aws_api_gateway_integration_response" "integration_response_500" {
   resource_id        = "${var.resource_id}"
   http_method        = "${var.http_method}"
   status_code        = "${aws_api_gateway_method_response.response_500.status_code}"
-  selection_pattern  = ".*internal-server-error.*"
+  selection_pattern  = "${var.selection_pattern_500}"
   response_templates = "${local.error_templates}"
 }
