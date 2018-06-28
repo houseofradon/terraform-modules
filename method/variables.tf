@@ -49,3 +49,7 @@ variable "passthrough_behavior" {
 variable "credentials" {
   default = false
 }
+
+variable "integration_http_method" {
+  default = "POST"
+}
