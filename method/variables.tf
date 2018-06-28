@@ -41,3 +41,11 @@ variable "response_template" {
 variable "error_model" {
   default = false
 }
+
+variable "passthrough_behavior" {
+  default = "NEVER"
+}
+
+variable "credentials" {
+  default = false
+}
