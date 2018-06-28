@@ -53,3 +53,15 @@ variable "credentials" {
 variable "integration_http_method" {
   default = "POST"
 }
+
+variable "404_selection_pattern" {
+  default = ".*not-found.*"
+}
+
+variable "422_selection_pattern" {
+  default = ".*:unprocessable-entity.*"
+}
+
+variable "500_selection_pattern" {
+  default = ".*internal-server-error.*"
+}
