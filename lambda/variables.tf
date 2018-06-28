@@ -8,7 +8,7 @@ variable "role" {}
 variable "handler" {}
 
 variable "source_code_hash" {
-  default = false
+  default = ""
 }
 
 variable "runtime" {
