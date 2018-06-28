@@ -45,6 +45,26 @@ resource "aws_iam_role" "lambda_assume_role" {
 EOF
 }
 
+resource "aws_iam_role" "api_gateway_assume_role" {
+  name = "${var.name}-api-gateway-assume-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
   role       = "${aws_iam_role.lambda_assume_role.name}"
   policy_arn = "${aws_iam_policy.logging_policy.arn}"
