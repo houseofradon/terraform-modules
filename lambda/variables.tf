@@ -2,6 +2,10 @@ variable "s3_bucket" {
   default = "radon-bundles"
 }
 
+variable "prefix" {
+  default = "default"
+}
+
 variable "s3_key" {}
 variable "function_name" {}
 variable "handler" {}

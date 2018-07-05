@@ -34,7 +34,7 @@ resource "aws_lambda_permission" "permission" {
 }
 
 resource "aws_iam_role" "lambda_assume_role" {
-  name = "${var.name}-lambda-assume-role"
+  name = "${var.prefix}-lambda-assume-role"
 
   assume_role_policy = <<EOF
 {
