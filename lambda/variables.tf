@@ -4,7 +4,6 @@ variable "s3_bucket" {
 
 variable "s3_key" {}
 variable "function_name" {}
-variable "role" {}
 variable "handler" {}
 
 variable "source_code_hash" {

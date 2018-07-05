@@ -21,3 +21,11 @@ output "only_params_validator" {
 output "full_validator" {
   value = "${aws_api_gateway_request_validator.full.id}"
 }
+
+output "assume_role_arn" {
+  value = "${aws_iam_role.api_gateway_assume_role.arn}"
+}
+
+output "assume_role_name" {
+  value = "${aws_iam_role.api_gateway_assume_role.name}"
+}
