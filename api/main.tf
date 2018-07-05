@@ -1,5 +1,5 @@
 resource "aws_iam_role" "api_gateway_assume_role" {
-  name = "${var.api_name}-api-gateway-assume-role"
+  name = "${var.prefix}-api-gateway-assume-role"
 
   assume_role_policy = <<EOF
 {
