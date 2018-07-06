@@ -59,7 +59,7 @@ variable "selection_pattern_404" {
 }
 
 variable "selection_pattern_422" {
-  default = ".*:unprocessable-entity.*"
+  default = ".*unprocessable-entity.*"
 }
 
 variable "selection_pattern_500" {
