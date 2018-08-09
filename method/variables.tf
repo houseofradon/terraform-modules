@@ -26,6 +26,10 @@ variable "response_model" {
 
 variable "integration_invoke_id" {}
 
+variable "type" {
+  default = "AWS"
+}
+
 variable "int_request_params" {
   default = {}
 }

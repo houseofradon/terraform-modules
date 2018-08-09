@@ -113,7 +113,7 @@ resource "aws_api_gateway_integration" "integration" {
   resource_id             = "${var.resource_id}"
   http_method             = "${var.http_method}"
   integration_http_method = "${var.integration_http_method}"
-  type                    = "AWS"
+  type                    = "${var.type}"
   uri                     = "${var.integration_invoke_id}"
   passthrough_behavior    = "${var.passthrough_behavior}"
   credentials             = "${var.credentials}"
