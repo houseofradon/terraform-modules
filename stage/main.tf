@@ -26,7 +26,7 @@ resource "aws_api_gateway_usage_plan_key" "plan_key" {
 
 resource "aws_api_gateway_domain_name" "subdomain" {
   domain_name     = "${var.subdomain}.${var.domain_name}"
-  certificate_arn = "arn:aws:acm:us-east-1:875714392944:certificate/39cd11ae-1480-4cd8-9c7e-15580699201d"
+  certificate_arn = "${var.certificate_arn}"
 }
 
 data "aws_route53_zone" "domain" {
