@@ -32,6 +32,10 @@ variable "tags" {
   }
 }
 
+variable "environment" {
+  default = ""
+}
+
 variable "rest_api_id" {}
 
 variable "endpoint_name" {
