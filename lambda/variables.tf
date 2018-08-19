@@ -32,8 +32,9 @@ variable "tags" {
   }
 }
 
-variable "environment" {
-  default = ""
+variable "environment_variables" {
+  type = "map"
+  default = {}
 }
 
 variable "rest_api_id" {}
