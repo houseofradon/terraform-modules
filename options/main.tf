@@ -43,7 +43,7 @@ resource "aws_api_gateway_integration_response" "integration_response" {
   rest_api_id = "${var.rest_api_id}"
   resource_id = "${var.resource_id}"
   http_method = "${aws_api_gateway_method.method.http_method}"
-  status_code = "${aws_api_gateway_method_response.response_200.status_code}"
+  status_code = "${aws_api_gateway_method_response.response.status_code}"
 
   response_templates = {
     "application/json" = ""
