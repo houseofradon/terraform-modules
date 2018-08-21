@@ -22,7 +22,7 @@ resource "aws_lambda_function" "function" {
   tags = "${var.tags}"
 
   lifecycle {
-    ignore_changes = ["last_modified"]
+    ignore_changes = ["last_modified", "environment"]
   }
 }
 
