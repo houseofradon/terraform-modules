@@ -32,11 +32,6 @@ variable "tags" {
   }
 }
 
-variable "environment_variables" {
-  type = "map"
-  default = {}
-}
-
 variable "rest_api_id" {}
 
 variable "endpoint_name" {

@@ -24,10 +24,6 @@ resource "aws_lambda_function" "function" {
   lifecycle {
     ignore_changes = ["last_modified"]
   }
-
-  environment = {
-    variables = "${var.environment_variables}"
-  }
 }
 
 resource "aws_lambda_permission" "permission" {
