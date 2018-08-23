@@ -1,3 +1,17 @@
+locals {
+  alias_name = {
+    EDGE = "${aws_api_gateway_domain_name.subdomain.cloudfront_domain_name}"
+
+    REGIONAL = "${aws_api_gateway_domain_name.subdomain.regional_domain_name}"
+  }
+
+  alias_zone = {
+    EDGE = "${aws_api_gateway_domain_name.subdomain.cloudfront_zone_id}"
+
+    REGIONAL = "${aws_api_gateway_domain_name.subdomain.regional_zone_id}"
+  }
+}
+
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = "${var.rest_api_id}"
   stage_name  = "${var.stage_name}"
@@ -27,6 +41,10 @@ resource "aws_api_gateway_usage_plan_key" "plan_key" {
 resource "aws_api_gateway_domain_name" "subdomain" {
   domain_name     = "${var.subdomain}.${var.domain_name}"
   certificate_arn = "${var.certificate_arn}"
+
+  endpoint_configuration = {
+    types = ["${var.endpoint_type}"]
+  }
 }
 
 data "aws_route53_zone" "domain" {
@@ -45,9 +63,9 @@ resource "aws_route53_record" "domain_record" {
   name    = "${aws_api_gateway_domain_name.subdomain.domain_name}"
   type    = "A"
 
-  alias {
-    name                   = "${aws_api_gateway_domain_name.subdomain.cloudfront_domain_name}"
-    zone_id                = "${aws_api_gateway_domain_name.subdomain.cloudfront_zone_id}"
+  alias = {
+    name                   = "${local.alias_name[var.endpoint_type]}"
+    zone_id                = "${local.alias_zone[var.endpoint_type]}"
     evaluate_target_health = true
   }
 }
