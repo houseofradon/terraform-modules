@@ -1,17 +1,3 @@
-locals {
-  alias_name = {
-    EDGE = "${aws_api_gateway_domain_name.subdomain.cloudfront_domain_name}"
-
-    REGIONAL = "${aws_api_gateway_domain_name.subdomain.regional_domain_name}"
-  }
-
-  alias_zone = {
-    EDGE = "${aws_api_gateway_domain_name.subdomain.cloudfront_zone_id}"
-
-    REGIONAL = "${aws_api_gateway_domain_name.subdomain.regional_zone_id}"
-  }
-}
-
 resource "aws_api_gateway_deployment" "deployment" {
   rest_api_id = "${var.rest_api_id}"
   stage_name  = "${var.stage_name}"
@@ -38,9 +24,22 @@ resource "aws_api_gateway_usage_plan_key" "plan_key" {
   usage_plan_id = "${aws_api_gateway_usage_plan.usage_plan.id}"
 }
 
-resource "aws_api_gateway_domain_name" "subdomain" {
+resource "aws_api_gateway_domain_name" "edge_subdomain" {
+  count = "${var.endpoint_type == "EDGE" ? 1 : 0}"
+
   domain_name     = "${var.subdomain}.${var.domain_name}"
   certificate_arn = "${var.certificate_arn}"
+
+  endpoint_configuration = {
+    types = ["${var.endpoint_type}"]
+  }
+}
+
+resource "aws_api_gateway_domain_name" "regional_subdomain" {
+  count = "${var.endpoint_type == "REGIONAL" ? 1 : 0}"
+
+  domain_name              = "${var.subdomain}.${var.domain_name}"
+  regional_certificate_arn = "${var.regional_certificate_arn}"
 
   endpoint_configuration = {
     types = ["${var.endpoint_type}"]
@@ -51,21 +50,48 @@ data "aws_route53_zone" "domain" {
   name = "${var.domain_name}."
 }
 
-resource "aws_api_gateway_base_path_mapping" "base_path" {
+resource "aws_api_gateway_base_path_mapping" "edge_base_path" {
+  count = "${var.endpoint_type == "EDGE" ? 1 : 0}"
+
   api_id      = "${var.rest_api_id}"
   stage_name  = "${aws_api_gateway_deployment.deployment.stage_name}"
-  domain_name = "${aws_api_gateway_domain_name.subdomain.domain_name}"
+  domain_name = "${aws_api_gateway_domain_name.edge_subdomain.domain_name}"
   base_path   = ""
 }
 
-resource "aws_route53_record" "domain_record" {
+resource "aws_api_gateway_base_path_mapping" "regional_base_path" {
+  count = "${var.endpoint_type == "REGIONAL" ? 1 : 0}"
+
+  api_id      = "${var.rest_api_id}"
+  stage_name  = "${aws_api_gateway_deployment.deployment.stage_name}"
+  domain_name = "${aws_api_gateway_domain_name.regional_subdomain.domain_name}"
+  base_path   = ""
+}
+
+resource "aws_route53_record" "edge_domain_record" {
+  count = "${var.endpoint_type == "EDGE" ? 1 : 0}"
+
   zone_id = "${data.aws_route53_zone.domain.id}"
-  name    = "${aws_api_gateway_domain_name.subdomain.domain_name}"
+  name    = "${aws_api_gateway_domain_name.edge_subdomain.domain_name}"
   type    = "A"
 
   alias = {
-    name                   = "${local.alias_name[var.endpoint_type]}"
-    zone_id                = "${local.alias_zone[var.endpoint_type]}"
+    name                   = "${aws_api_gateway_domain_name.edge_subdomain.cloudfront_domain_name}"
+    zone_id                = "${aws_api_gateway_domain_name.edge_subdomain.cloudfront_zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+resource "aws_route53_record" "regional_domain_record" {
+  count = "${var.endpoint_type == "REGIONAL" ? 1 : 0}"
+
+  zone_id = "${data.aws_route53_zone.domain.id}"
+  name    = "${aws_api_gateway_domain_name.regional_subdomain.domain_name}"
+  type    = "A"
+
+  alias = {
+    name                   = "${aws_api_gateway_domain_name.regional_subdomain.regional_domain_name}"
+    zone_id                = "${aws_api_gateway_domain_name.regional_subdomain.regional_zone_id}"
     evaluate_target_health = true
   }
 }
