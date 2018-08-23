@@ -39,6 +39,26 @@ locals {
     }
   }
 
+  response_parameters = {
+    default = {}
+
+    custom = {
+      "method.response.header.Access-Control-Allow-Headers" = "0"
+      "method.response.header.Access-Control-Allow-Methods" = "0"
+      "method.response.header.Access-Control-Allow-Origin"  = "0"
+    }
+  }
+
+  integration_response_parameters = {
+    default = {}
+
+    custom = {
+      "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      "method.response.header.Access-Control-Allow-Methods" = "'${var.http_method}'"
+      "method.response.header.Access-Control-Allow-Origin"  = "'${var.origin}'"
+    }
+  }
+
   error_templates = {
     "application/json" = <<EOF
 #set($errorResponse = $util.parseJson($input.path('$.errorMessage')))
@@ -87,11 +107,7 @@ resource "aws_api_gateway_method_response" "response_404" {
 
   response_models = "${local.error_model[var.error_model == "0" ? "default" : "custom"]}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "0"
-    "method.response.header.Access-Control-Allow-Methods" = "0"
-    "method.response.header.Access-Control-Allow-Origin"  = "0"
-  }
+  response_parameters = "${local.response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_method_response" "response_422" {
@@ -103,11 +119,7 @@ resource "aws_api_gateway_method_response" "response_422" {
 
   response_models = "${local.error_model[var.error_model == "0" ? "default" : "custom"]}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "0"
-    "method.response.header.Access-Control-Allow-Methods" = "0"
-    "method.response.header.Access-Control-Allow-Origin"  = "0"
-  }
+  response_parameters = "${local.response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_method_response" "response_500" {
@@ -119,11 +131,7 @@ resource "aws_api_gateway_method_response" "response_500" {
 
   response_models = "${local.error_model[var.error_model == "0" ? "default" : "custom"]}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "0"
-    "method.response.header.Access-Control-Allow-Methods" = "0"
-    "method.response.header.Access-Control-Allow-Origin"  = "0"
-  }
+  response_parameters = "${local.response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_integration" "integration" {
@@ -149,11 +157,7 @@ resource "aws_api_gateway_integration_response" "integration_response_200" {
 
   response_templates = "${local.response_template[var.response_template == "0" ? "default" : "custom"]}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'${var.http_method}'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.origin}'"
-  }
+  response_parameters = "${local.integration_response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_integration_response" "integration_response_404" {
@@ -165,11 +169,7 @@ resource "aws_api_gateway_integration_response" "integration_response_404" {
   selection_pattern  = "${var.selection_pattern_404}"
   response_templates = "${local.error_templates}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'${var.http_method}'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.origin}'"
-  }
+  response_parameters = "${local.integration_response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_integration_response" "integration_response_422" {
@@ -181,11 +181,7 @@ resource "aws_api_gateway_integration_response" "integration_response_422" {
   selection_pattern  = "${var.selection_pattern_422}"
   response_templates = "${local.error_templates}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'${var.http_method}'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.origin}'"
-  }
+  response_parameters = "${local.integration_response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }
 
 resource "aws_api_gateway_integration_response" "integration_response_500" {
@@ -197,9 +193,5 @@ resource "aws_api_gateway_integration_response" "integration_response_500" {
   selection_pattern  = "${var.selection_pattern_500}"
   response_templates = "${local.error_templates}"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'${var.http_method}'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'${var.origin}'"
-  }
+  response_parameters = "${local.integration_response_parameters[var.access_control_allow == "0" ? "default" : "custom"]}"
 }

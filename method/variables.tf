@@ -73,3 +73,7 @@ variable "selection_pattern_422" {
 variable "selection_pattern_500" {
   default = ".*internal-server-error.*"
 }
+
+variable "access_control_allow" {
+  default = true
+}
