@@ -11,7 +11,7 @@ variable "authorization" {
 }
 
 variable "authorizer_id" {
-  default = false
+  default = ""
 }
 
 variable "api_key_required" {
