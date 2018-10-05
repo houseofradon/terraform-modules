@@ -1,3 +1,15 @@
+locals {
+  environment = {
+    default = []
+
+    custom = [{
+      variables = {
+        "stage" = "${var.stage}"
+      }
+    }]
+  }
+}
+
 data "aws_region" "current" {}
 
 data "aws_caller_identity" "current" {}
@@ -18,12 +30,14 @@ resource "aws_lambda_function" "function" {
   runtime           = "${var.runtime}"
   timeout           = "${var.timeout}"
   memory_size       = "${var.memory}"
+  environment       = "${local.environment[var.stage == "0" ? "default" : "custom"]}"
 
   tags = "${var.tags}"
 
-  lifecycle {
-    ignore_changes = ["last_modified", "environment"]
+  lifecycle = {
+    ignore_changes = ["last_modified"]
   }
+
 }
 
 resource "aws_lambda_permission" "permission" {

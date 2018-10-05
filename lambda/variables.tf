@@ -37,3 +37,7 @@ variable "rest_api_id" {}
 variable "endpoint_name" {
   default = "*"
 }
+
+variable "stage" {
+  default = false
+}
